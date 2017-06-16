@@ -17,7 +17,8 @@ public:
     ~CFaktura();
     CSprzedawca sprzedawca;
     CNabywca nabywca;
-    CTowar *tab=NULL;
+    CTowar *tab;
+    int ileTow=0;
     CKalendarz datawystawienia;
     string sposobZaplaty;
     void dodajtowar(CTowar);

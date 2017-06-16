@@ -15,9 +15,12 @@ class CScheduler {
 public:
     CScheduler();
     ~CScheduler();
-    CFaktura *tabF = NULL;
-    CSprzedawca *tabS = NULL;
-    CNabywca *tabN = NULL;
+    CFaktura *tabF=NULL;
+    int ileFaktur = 0;
+    CSprzedawca *tabS;
+    int iluSprzed=0;
+    CNabywca *tabN;
+    int iluNab=0;
     void zapiszF();
     void odczytF();
     void dodajFakture(CFaktura);

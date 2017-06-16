@@ -66,3 +66,11 @@ float CTowar::brutto()
 {
     return getCenaNetto()*getIlosc()*((100+getVAT())/100);
 }
+
+CTowar::CTowar(string nazwa, float cena, float i, string jed, int v) {
+    nazwatowaru=nazwa;
+    cenanetto=cena;
+    ilosc=i;
+    jm=jed;
+    vat=v;
+}

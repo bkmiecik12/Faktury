@@ -14,7 +14,7 @@ CFaktura::~CFaktura() {
 
 double CFaktura::dozaplatyB() {
     double suma = 0;
-    int tabsize = (sizeof(tab) / sizeof(tab[0]));
+    int tabsize = ileTow;
     for (int i = 0; i < tabsize; i++)
     {
         suma = suma + tab[i].brutto();
@@ -24,7 +24,7 @@ double CFaktura::dozaplatyB() {
 
 double CFaktura::dozaplatyN() {
     double suma = 0;
-    int tabsize = (sizeof(tab) / sizeof(tab[0]));
+    int tabsize = ileTow;
     for (int i = 0; i < tabsize; i++)
     {
         suma = suma + tab[i].wartoscnetto();
@@ -34,7 +34,7 @@ double CFaktura::dozaplatyN() {
 
 double CFaktura::dozaplatyP() {
     double suma = 0;
-    int tabsize = (sizeof(tab) / sizeof(tab[0]));
+    int tabsize = ileTow;
     for (int i = 0; i < tabsize; i++)
     {
         suma = suma + tab[i].podatek();
@@ -62,13 +62,17 @@ void CFaktura::dodajtowar(CTowar t) {
     }
     else
     {
-        int tabsize = (sizeof(tab) / sizeof(tab[0]));
+        int tabsize = ileTow;
         CTowar *tab2 = new CTowar[tabsize + 1];
         for (int i = 0; i < tabsize; i++)
         {
+            //cout<<tab[i].getNazwaTowaru()<<endl;
             tab2[i] = tab[i];
+            //cout<<tab2[i].getNazwaTowaru()<<endl;
         }
         tab2[tabsize] = t;
         tab = tab2;
+        cout<<tab[tabsize].getNazwaTowaru()<<" "<<tabsize<<endl;
     }
+    ileTow++;
 }

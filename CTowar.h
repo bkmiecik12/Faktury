@@ -13,6 +13,7 @@ using namespace std;
 class CTowar {
 public:
     CTowar();
+    CTowar(string nazwa, float cena, float i, string jed, int v);
     ~CTowar();
     string getNazwaTowaru();
     float getCenaNetto();

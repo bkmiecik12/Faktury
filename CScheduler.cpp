@@ -24,7 +24,8 @@ void CScheduler::zapiszF() {
     }
     if (tabF != NULL)
     {
-        int tabsize = (sizeof(tabF) / sizeof(tabF[0]));
+
+        int tabsize = ileFaktur;
         for (int q = 0; q < tabsize; q++)
         {
             plik << tabF[q].datawystawienia.dzien << endl;
@@ -48,7 +49,7 @@ void CScheduler::zapiszF() {
 
             if (tabF[q].tab != NULL)
             {
-                int ileTowarow = sizeof(tabF[q].tab) / sizeof(tabF[q].tab[0]);
+                int ileTowarow = tabF[q].ileTow;
                 plik<<ileTowarow<<endl;
                 for (int j = 0; j < ileTowarow; j++)
                 {
@@ -58,9 +59,10 @@ void CScheduler::zapiszF() {
                     plik << tabF[q].tab[j].getJM() << endl;
                     plik << tabF[q].tab[j].getVAT() << endl;
 
-                    plik << "_________________" << endl;
+
                 }
             }
+            plik << "_________________" << endl;
         }
         plik.close();
     }
@@ -78,7 +80,7 @@ void CScheduler::dodajFakture(CFaktura t) {
     }
     else
     {
-        int tabsize = (sizeof(tabF) / sizeof(tabF[0]));
+        int tabsize = (sizeof(*tabF) / sizeof(tabF[0]));
         CFaktura *tab2 = new CFaktura[tabsize + 1];
         for (int i = 0; i < tabsize; i++)
         {
