@@ -39,6 +39,7 @@ void CScheduler::zapiszF() {
             plik << s.getAdres() << endl;
             plik << s.getNIP() << endl;
             plik << s.getREGON() << endl;
+            plik << s.NumerKonta << endl;
 
             CNabywca n = tabF[q].nabywca;
             plik << n.getNazwa() << endl;
@@ -69,7 +70,71 @@ void CScheduler::zapiszF() {
 }
 
 void CScheduler::odczytF() {
+    fstream plik;
+    plik.open("faktury.txt",ios::in);
 
+    if(plik.good()==false){
+        cout<<"Błąd otwarcia pliku";
+    }
+
+    int liczba_faktur;
+    string sn,sa,sreg,snip,snrk;
+    string nn,na,nreg,nnip;
+    CFaktura faktura;
+
+    plik>>liczba_faktur;
+
+    for(int i=0;i<liczba_faktur;i++){
+        int nrf,d,m,r;
+        string sn,sa,sreg,snip,snrk;
+        string nn,na,nreg,nnip;
+        string sp;
+        CFaktura faktura;
+        plik>>nrf;
+        plik>>d>>m>>r;
+        CKalendarz data(d,m,r);
+        faktura.datawystawienia = data;
+        faktura.numer=nrf;
+
+        //plik>>sn>>sa>>sreg>>snip>>snrk;
+        getline(plik,sn);
+        getline(plik,sn);
+        cout<<sn<<endl;
+        getline(plik,sa);
+        cout<<sa<<endl;
+        getline(plik,sreg);
+        getline(plik,snip);
+        getline(plik,snrk);
+        CSprzedawca s(sn,sa,sreg,snip,"","");
+        s.setNumerKonta(snrk);
+
+        plik>>nn>>na>>nreg>>nnip;
+        CNabywca n(nn,na,nreg,nnip);
+
+        plik>>sp;
+        faktura.sposobZaplaty=sp;
+        faktura.nabywca=n;
+        faktura.sprzedawca=s;
+        int liczbaTowarow;
+        plik>>liczbaTowarow;
+        cout<<liczbaTowarow<<endl;
+        for(int j=0;j<liczbaTowarow;j++){
+            string tn,tj;
+            float ti,tc;
+            int tv;
+            plik>>tn>>tc>>ti>>tj>>tv;
+            cout<<tn<<endl;
+            CTowar t(tn,tc,ti,tj,tv);
+            dodajTowar(t);
+            faktura.dodajtowar(t);
+        }
+        string sep;
+        plik>>sep;
+        dodajFakture(faktura);
+    }
+
+
+    plik.close();
 }
 
 
@@ -243,7 +308,7 @@ int CScheduler::wybierzTowar() {
     printf("%2d. Zakończ\n",0);
     int wynik;
     cin>>wynik;
-    if(wynik>1 && wynik<=ileTowarow) return wynik-2;
+    if(wynik>1 && wynik<=ileTowarow+1) return wynik-2;
     else if(wynik==0) return -2;
     else return -1;
 }
@@ -379,7 +444,7 @@ void CScheduler::listaFaktur() {
     cin>>p;
     if(p==0)
         menuZ();
-    //else drukuj();
+    //else drukuj(p-1);
 }
 
 

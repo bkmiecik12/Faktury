@@ -24,11 +24,17 @@ int main() {
     f1.dodajtowar(t3);
     f1.sposobZaplaty= "Gotówka";
     f1.datawystawienia = CKalendarz(16,06,17);
-    scheduler.dodajFakture(f1);
+//    scheduler.dodajFakture(f1);
     scheduler.dodajTowar(t1);
     scheduler.dodajTowar(t2);
     scheduler.dodajTowar(t3);
     scheduler.dodajSprzedawce(s1);
     scheduler.dodajNabywce(n1);
+//    scheduler.zapiszF();
+    scheduler.odczytF();
     scheduler.menu0();
+
+//    cout<<scheduler.ileFaktur<<endl;
+//    cout<<scheduler.ileTowarow;
+
 }
