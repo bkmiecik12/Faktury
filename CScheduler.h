@@ -34,6 +34,9 @@ public:
     void zapiszF();
     void odczytF();
 
+    void menu0();
+    void menuZ();
+
     void logowanie();
 
     void dodajFakture(CFaktura);
@@ -43,13 +46,16 @@ public:
 
     CFaktura wprowadzFakture();
     CNabywca wprowadzNabywce();
+    CTowar wprowadzTowar();
     CKalendarz wprowadzDate();
     int wybierzNabywce();
     int wybierzTowar();
     int wprowadzNumer();
     string sposobZaplaty();
 
+    CSprzedawca wprowadzSprzedawce();
 
+    void listaFaktur();
 };
 
 

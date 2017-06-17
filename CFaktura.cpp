@@ -42,18 +42,6 @@ double CFaktura::dozaplatyP() {
     return suma;
 }
 
-void CFaktura::sposobzaplaty(int s) {
-    if (s == 1)
-        sposobZaplaty = "Przelew";
-
-    else if (s == 2)
-        sposobZaplaty = "Gotowka";
-    else if (s == 69)
-        sposobZaplaty = "W naturze";
-    else
-        cout << "Błšd";
-}
-
 void CFaktura::dodajtowar(CTowar t) {
     if (tab == NULL)
     {
@@ -66,13 +54,10 @@ void CFaktura::dodajtowar(CTowar t) {
         CTowar *tab2 = new CTowar[tabsize + 1];
         for (int i = 0; i < tabsize; i++)
         {
-            //cout<<tab[i].getNazwaTowaru()<<endl;
             tab2[i] = tab[i];
-            //cout<<tab2[i].getNazwaTowaru()<<endl;
         }
         tab2[tabsize] = t;
         tab = tab2;
-        cout<<tab[tabsize].getNazwaTowaru()<<" "<<tabsize<<endl;
     }
     ileTow++;
 }

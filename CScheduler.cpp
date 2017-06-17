@@ -166,10 +166,10 @@ CFaktura CScheduler::wprowadzFakture() {
     if(nab>=0) f.nabywca=tabN[nab];
     else f.nabywca = wprowadzNabywce();
     int n=0;
-    while(n>=0){
+    while(n>=-1){
         n=wybierzTowar();
-        if(n>=0)
-            f.dodajtowar(tabT[n]);
+        if(n>=0) f.dodajtowar(tabT[n]);
+        else if(n==-1) f.dodajtowar(wprowadzTowar());
     }
     cout<<"Do zapłaty brutto: "<<f.dozaplatyB()<<endl;
     f.sposobZaplaty = sposobZaplaty();
@@ -196,6 +196,7 @@ void CScheduler::logowanie() {
         if(tabS[i].getLogin()==login && tabS[i].getPassword()==haslo) {
             zalogowany = tabS[i];
             cout << zalogowany.getNazwa() << " witaj w systemie" << endl;
+            menuZ();
             return;
         }
     }
@@ -235,13 +236,15 @@ CNabywca CScheduler::wprowadzNabywce() {
 int CScheduler::wybierzTowar() {
     //system("cls");
     cout<<"Lista towarow:\n";
+    printf("%2d. Nowy towar\n",1);
     for(int i=0;i<ileTowarow;i++){
-        printf("%2d. %s\n",i+1,tabT[i].getNazwaTowaru().c_str());
+        printf("%2d. %s\n",i+2,tabT[i].getNazwaTowaru().c_str());
     }
     printf("%2d. Zakończ\n",0);
     int wynik;
     cin>>wynik;
-    if(wynik>0 && wynik<=ileTowarow) return wynik-1;
+    if(wynik>1 && wynik<=ileTowarow) return wynik-2;
+    else if(wynik==0) return -2;
     else return -1;
 }
 
@@ -282,6 +285,101 @@ string CScheduler::sposobZaplaty() {
         default:
             return "Sposób niestandardowy";
     }
+}
+
+CTowar CScheduler::wprowadzTowar() {
+    string nazwa,jm;
+    float i,cena;
+    int vat;
+    cout<<"Nazwa towaru: ";
+    cin>>nazwa;
+    cout<<"ilość: ";
+    cin>>i;
+    cout<<"Cena netto: ";
+    cin>>cena;
+    cout<<"Jednostka miary: ";
+    cin>>jm;
+    cout<<"Stawka VAT: ";
+    cin>>vat;
+    CTowar wynik(nazwa,cena,i,jm,vat);
+    dodajTowar(wynik);
+    return wynik;
+}
+
+CSprzedawca CScheduler::wprowadzSprzedawce() {
+    string nazwa,adres,nip,regon,login,haslo;
+    cout<<"NOWY SPRZEDAWCA\n";
+    cout<<"Login: ";
+    cin>>login;
+    cout<<"Hasło: ";
+    cin>>haslo;
+    cout<<"Nazwa: ";
+    cin>>nazwa;
+    cout<<"\nAdres: ";
+    cin>>adres;
+    cout<<"\nNIP: ";
+    cin>>nip;
+    cout<<"\nREGON: ";
+    cin>>regon;
+    CSprzedawca wynik(nazwa,adres,nip,regon,login,haslo);
+    dodajSprzedawce(wynik);
+    return wynik;
+}
+
+void CScheduler::menu0() {
+    cout<<"WITAJ\n";
+    cout<<"1. Zaloguj się\n";
+    cout<<"2. Nowe konto\n";
+    cout<<"0. Zakończ\n";
+    int nr;
+    cin>>nr;
+    switch (nr){
+        case 1:
+            logowanie();
+            break;
+        case 2:
+            wprowadzSprzedawce();
+            menu0();
+            break;
+        default:
+            return;
+    }
+
+}
+
+void CScheduler::menuZ() {
+    cout<<"WITAJ\n";
+    cout<<"1. Dodaj nową fakture\n";
+    cout<<"2. Lista faktur\n";
+    cout<<"0. Wyloguj\n";
+    int nr;
+    cin>>nr;
+    switch (nr){
+        case 1:
+            wprowadzFakture();
+            break;
+        case 2:
+            listaFaktur();
+            break;
+        default:
+            menu0();
+            return;
+    }
+}
+
+void CScheduler::listaFaktur() {
+    cout<<"\nLista dostepnych faktur: \n\n";
+    printf("%2s. %-20s%-20s\n","Lp","SPRZEDAWCA","NABYWCA");
+    for(int i=0;i<ileFaktur;i++){
+        printf("%2d. %-20s%-20s\n",i+1,tabF[i].sprzedawca.getNazwa().c_str(),tabF[i].nabywca.getNazwa().c_str());
+    }
+    cout<<endl;
+    int p;
+    cout<<"Wciśnij nr faktury, aby zobaczyć szczegóły\n lub 0, aby powrócić";
+    cin>>p;
+    if(p==0)
+        menuZ();
+    //else drukuj();
 }
 
 

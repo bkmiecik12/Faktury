@@ -26,7 +26,6 @@ public:
     double dozaplatyB();
     double dozaplatyN();
     double dozaplatyP();
-    void sposobzaplaty(int);
 
 };
 
