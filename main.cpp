@@ -3,7 +3,6 @@
 #include "CNabywca.h"
 #include "CTowar.h"
 #include "CScheduler.h"
-#include <stdio.h>
 
 using namespace std;
 
@@ -33,6 +32,6 @@ int main() {
     scheduler.dodajNabywce(n1);
     scheduler.logowanie();
     scheduler.wprowadzFakture();
-//    scheduler.tabF[0].datawystawienia.drukujdate();
-//    scheduler.zapiszF();
+    scheduler.tabF[0].datawystawienia.drukujdate();
+    scheduler.zapiszF();
 }

@@ -17,7 +17,7 @@ public:
     string getPassword();
     void setLogin(string);
     void setPassword(string);
-    string NumerKonta;
+    string NumerKonta = "";
     void setNumerKonta(string);
 private:
     string login;

@@ -28,6 +28,7 @@ void CScheduler::zapiszF() {
         plik << ileFaktur << endl;
         for (int q = 0; q < tabsize; q++)
         {
+            plik << tabF[q].numer << endl;
             plik << tabF[q].datawystawienia.dzien << endl;
             plik << tabF[q].datawystawienia.miesiac << endl;
             plik << tabF[q].datawystawienia.rok << endl;
@@ -157,7 +158,10 @@ void CScheduler::dodajTowar(CTowar t) {
 
 CFaktura CScheduler::wprowadzFakture() {
     CFaktura f;
+    cout<<"WPROWADZANIE NOWEJ FAKTURY\n";
     f.sprzedawca = zalogowany;
+    f.datawystawienia = wprowadzDate();
+    f.numer = wprowadzNumer();
     int nab= wybierzNabywce();
     if(nab>=0) f.nabywca=tabN[nab];
     else f.nabywca = wprowadzNabywce();
@@ -167,8 +171,14 @@ CFaktura CScheduler::wprowadzFakture() {
         if(n>=0)
             f.dodajtowar(tabT[n]);
     }
-//    data i numer
-//    sposob zaplaty
+    cout<<"Do zapłaty brutto: "<<f.dozaplatyB()<<endl;
+    f.sposobZaplaty = sposobZaplaty();
+    if(f.sposobZaplaty=="Przelew" && f.sprzedawca.NumerKonta=="") {
+        cout<<"PODAJ NUMER KONTA: ";
+        string konto;
+        cin>>konto;
+        f.sprzedawca.NumerKonta=konto;
+    }
     dodajFakture(f);
     return f;
 }
@@ -239,11 +249,41 @@ CKalendarz CScheduler::wprowadzDate() {
     int d,m,r;
     cout<<"Dzień: ";
     cin>>d;
-    cout<<"\nMiesiąc: ";
+    cout<<"Miesiąc: ";
     cin>>m;
-    cout<<"\nRok: ";
+    cout<<"Rok: ";
     cin>>r;
-    return CKalendarz(d,m,r);
+    CKalendarz k(d,m,r);
+    if(k.sprawdzdate()) return k;
+    else return wprowadzDate();
 }
+
+int CScheduler::wprowadzNumer() {
+    int nr;
+    cout<<"Wprowadź numer faktury: ";
+    cin>>nr;
+    return nr;
+}
+
+string CScheduler::sposobZaplaty() {
+    string s;
+    int n;
+    cout<<"PODAJ SPOSÓB ZAPŁATY\n";
+    cout<<"1. Gotówka\n";
+    cout<<"2. Przelew\n";
+    cin>>n;
+    switch (n){
+        case 1:
+            return "Gotówka";
+        case 2:
+            return "Przelew";
+        case 69:
+            return "W naturze";
+        default:
+            return "Sposób niestandardowy";
+    }
+}
+
+
 
 

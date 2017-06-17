@@ -44,10 +44,10 @@ public:
     CFaktura wprowadzFakture();
     CNabywca wprowadzNabywce();
     CKalendarz wprowadzDate();
-
     int wybierzNabywce();
     int wybierzTowar();
     int wprowadzNumer();
+    string sposobZaplaty();
 
 
 };
