@@ -24,8 +24,8 @@ void CScheduler::zapiszF() {
     }
     if (tabF != NULL)
     {
-
         int tabsize = ileFaktur;
+        plik << ileFaktur << endl;
         for (int q = 0; q < tabsize; q++)
         {
             plik << tabF[q].datawystawienia.dzien << endl;
@@ -59,10 +59,9 @@ void CScheduler::zapiszF() {
                     plik << tabF[q].tab[j].getJM() << endl;
                     plik << tabF[q].tab[j].getVAT() << endl;
 
-
                 }
             }
-            plik << "_________________" << endl;
+            plik << "--------------" << endl;
         }
         plik.close();
     }
@@ -72,6 +71,8 @@ void CScheduler::odczytF() {
 
 }
 
+
+
 void CScheduler::dodajFakture(CFaktura t) {
     if (tabF == NULL)
     {
@@ -80,7 +81,7 @@ void CScheduler::dodajFakture(CFaktura t) {
     }
     else
     {
-        int tabsize = (sizeof(*tabF) / sizeof(tabF[0]));
+        int tabsize = ileFaktur;
         CFaktura *tab2 = new CFaktura[tabsize + 1];
         for (int i = 0; i < tabsize; i++)
         {
@@ -89,16 +90,160 @@ void CScheduler::dodajFakture(CFaktura t) {
         tab2[tabsize] = t;
         tabF = tab2;
     }
+    ileFaktur++;
 }
 
-void CScheduler::dodajSprzedawce(CSprzedawca) {
+void CScheduler::dodajSprzedawce(CSprzedawca s) {
+    if (tabS == NULL)
+    {
+        tabS = new CSprzedawca[1];
+        tabS[0] = s;
+    }
+    else
+    {
+        int tabsize = iluSprzed;
+        CSprzedawca *tab2 = new CSprzedawca[tabsize + 1];
+        for (int i = 0; i < tabsize; i++)
+        {
+            tab2[i] = tabS[i];
+        }
+        tab2[tabsize] = s;
+        tabS = tab2;
+    }
+    iluSprzed++;
+}
+
+void CScheduler::dodajNabywce(CNabywca n) {
+    if (tabN == NULL)
+    {
+        tabN = new CNabywca[1];
+        tabN[0] = n;
+    }
+    else
+    {
+        int tabsize = iluNab;
+        CNabywca *tab2 = new CNabywca[tabsize + 1];
+        for (int i = 0; i < tabsize; i++)
+        {
+            tab2[i] = tabN[i];
+        }
+        tab2[tabsize] = n;
+        tabN = tab2;
+    }
+    iluNab++;
+}
+
+void CScheduler::dodajTowar(CTowar t) {
+    if (tabT == NULL)
+    {
+        tabT = new CTowar[1];
+        tabT[0] = t;
+    }
+    else
+    {
+        int tabsize = ileTowarow;
+        CTowar *tab2 = new CTowar[tabsize + 1];
+        for (int i = 0; i < tabsize; i++)
+        {
+            tab2[i] = tabT[i];
+        }
+        tab2[tabsize] = t;
+        tabT = tab2;
+    }
+    ileTowarow++;
+}
+
+
+
+CFaktura CScheduler::wprowadzFakture() {
+    CFaktura f;
+    f.sprzedawca = zalogowany;
+    int nab= wybierzNabywce();
+    if(nab>=0) f.nabywca=tabN[nab];
+    else f.nabywca = wprowadzNabywce();
+    int n=0;
+    while(n>=0){
+        n=wybierzTowar();
+        if(n>=0)
+            f.dodajtowar(tabT[n]);
+    }
+//    data i numer
+//    sposob zaplaty
+    dodajFakture(f);
+    return f;
+}
+
+void CScheduler::logowanie() {
+//    system("cls"); //czyszczenie konsoli dla windowsa
+    cout<< "Login: ";
+    string login;
+    cin >> login;
+    cout<< "Haslo: ";
+    string haslo;
+    cin >> haslo;
+
+    for(int i=0;i<iluSprzed;i++){
+        if(tabS[i].getLogin()==login && tabS[i].getPassword()==haslo) {
+            zalogowany = tabS[i];
+            cout << zalogowany.getNazwa() << " witaj w systemie" << endl;
+            return;
+        }
+    }
+    cout<<"Niepoprawne dane\n";
+    logowanie();
 
 }
 
-void CScheduler::dodajNabywce(CNabywca) {
-
+int CScheduler::wybierzNabywce() {
+    cout<<"Lista nabywcow:\n";
+    for(int i=0;i<iluNab;i++){
+        printf("%2d. %-15s%-15s\n",i+1,tabN[i].getNazwa().c_str(),tabN[i].getAdres().c_str());
+    }
+    printf("%2d. Nowy nabywca\n",0);
+    int wynik;
+    cin>>wynik;
+    if(wynik>0 && wynik<=iluSprzed) return wynik-1;
+    else return -1;
 }
 
-void CScheduler::dodajtowar(CTowar) {
-
+CNabywca CScheduler::wprowadzNabywce() {
+    string nazwa,adres,nip,regon;
+    cout<<"NOWY NABYWCA\n";
+    cout<<"Nazwa: ";
+    cin>>nazwa;
+    cout<<"\nAdres: ";
+    cin>>adres;
+    cout<<"\nNIP: ";
+    cin>>nip;
+    cout<<"\nREGON: ";
+    cin>>regon;
+    CNabywca wynik(nazwa,adres,nip,regon);
+    dodajNabywce(wynik);
+    return wynik;
 }
+
+int CScheduler::wybierzTowar() {
+    //system("cls");
+    cout<<"Lista towarow:\n";
+    for(int i=0;i<ileTowarow;i++){
+        printf("%2d. %s\n",i+1,tabT[i].getNazwaTowaru().c_str());
+    }
+    printf("%2d. Zakończ\n",0);
+    int wynik;
+    cin>>wynik;
+    if(wynik>0 && wynik<=ileTowarow) return wynik-1;
+    else return -1;
+}
+
+CKalendarz CScheduler::wprowadzDate() {
+    int d,m,r;
+    cout<<"Dzień: ";
+    cin>>d;
+    cout<<"\nMiesiąc: ";
+    cin>>m;
+    cout<<"\nRok: ";
+    cin>>r;
+    return CKalendarz(d,m,r);
+}
+
+

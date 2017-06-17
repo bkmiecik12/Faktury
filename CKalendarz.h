@@ -5,6 +5,10 @@
 #ifndef FAKTURY_CKALENDARZ_H
 #define FAKTURY_CKALENDARZ_H
 
+#include <iostream>
+
+using namespace std;
+
 
 class CKalendarz {
 public:

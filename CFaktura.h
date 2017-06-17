@@ -20,6 +20,7 @@ public:
     CTowar *tab;
     int ileTow=0;
     CKalendarz datawystawienia;
+    int numer;
     string sposobZaplaty;
     void dodajtowar(CTowar);
     double dozaplatyB();
